@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: ./kompose --file docker-compose-with-frontend.yml convert
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: graphite
+  name: graphite
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: graphite
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: ./kompose --file docker-compose-with-frontend.yml convert
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: graphite
+    spec:
+      containers:
+      - image: sitespeedio/graphite:1.0.2-2-b
+        imagePullPolicy: ""
+        name: graphite
+        ports:
+        - containerPort: 2003
+        - containerPort: 80
+        resources: {}
+        volumeMounts:
+        - mountPath: /opt/graphite/storage/whisper
+          name: whisper
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: whisper
+        persistentVolumeClaim:
+          claimName: whisper
+status: {}

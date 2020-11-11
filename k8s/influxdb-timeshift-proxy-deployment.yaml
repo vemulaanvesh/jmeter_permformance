@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: ./kompose --file docker-compose-with-frontend.yml convert
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: influxdb-timeshift-proxy
+  name: influxdb-timeshift-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: influxdb-timeshift-proxy
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: ./kompose --file docker-compose-with-frontend.yml convert
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: influxdb-timeshift-proxy
+    spec:
+      containers:
+      - args:
+        - sh
+        - -c
+        - npm i -d && npm run start
+        env:
+        - name: INFLUXDB
+          value: influxdb:8086
+        image: node:alpine
+        imagePullPolicy: ""
+        name: influxdb-timeshift-proxy
+        ports:
+        - containerPort: 8989
+        resources: {}
+        volumeMounts:
+        - mountPath: /influxdb-timeshift-proxy/
+          name: influxdb-timeshift-proxy-claim0
+        workingDir: /influxdb-timeshift-proxy/
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: influxdb-timeshift-proxy-claim0
+        persistentVolumeClaim:
+          claimName: influxdb-timeshift-proxy-claim0
+status: {}

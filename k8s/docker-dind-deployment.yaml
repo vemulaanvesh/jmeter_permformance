@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: ./kompose --file docker-compose-with-frontend.yml convert
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: docker-dind
+  name: docker-dind
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: docker-dind
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: ./kompose --file docker-compose-with-frontend.yml convert
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: docker-dind
+    spec:
+      containers:
+      - image: docker:dind
+        imagePullPolicy: ""
+        name: docker-dind
+        resources: {}
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - mountPath: /usr/local/bin
+          name: docker-dind
+        - mountPath: /var/run/docker.sock
+          name: docker-dind-claim1
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: docker-dind
+        persistentVolumeClaim:
+          claimName: docker-dind
+      - name: docker-dind-claim1
+        persistentVolumeClaim:
+          claimName: docker-dind-claim1
+status: {}

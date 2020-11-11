@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: ./kompose --file docker-compose-with-frontend.yml convert
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: jmeter
+  name: jmeter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: jmeter
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: ./kompose --file docker-compose-with-frontend.yml convert
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: jmeter
+    spec:
+      containers:
+      - command:
+        - cat
+        image: java:8-jdk
+        imagePullPolicy: ""
+        name: jmeter
+        resources: {}
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}

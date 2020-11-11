@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: ./kompose --file docker-compose-with-frontend.yml convert
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: jenkins
+  name: jenkins
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: jenkins
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: ./kompose --file docker-compose-with-frontend.yml convert
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: jenkins
+    spec:
+      containers:
+      - env:
+        - name: JENKINS_ADMIN_LOGIN
+          value: admin
+        - name: JENKINS_ADMIN_PASSWORD
+          value: admin
+        image: jenkins/jenkins
+        imagePullPolicy: ""
+        name: jenkins
+        ports:
+        - containerPort: 8080
+        - containerPort: 50000
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/lib/sitespeed.io/
+          name: jenkins-claim0
+        - mountPath: /usr/local/bin/dind/
+          name: docker-dind
+        - mountPath: /var/run/docker.sock
+          name: jenkins-claim2
+        - mountPath: /var/jenkins_home
+          name: jenkins-home
+        - mountPath: /var/lib/jmeter-scenarios/
+          name: jenkins-claim4
+        - mountPath: /var/lib/wpt-scripts/
+          name: jenkins-claim5
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: jenkins-claim0
+        persistentVolumeClaim:
+          claimName: jenkins-claim0
+      - name: docker-dind
+        persistentVolumeClaim:
+          claimName: docker-dind
+      - name: jenkins-claim2
+        persistentVolumeClaim:
+          claimName: jenkins-claim2
+      - name: jenkins-home
+        persistentVolumeClaim:
+          claimName: jenkins-home
+      - name: jenkins-claim4
+        persistentVolumeClaim:
+          claimName: jenkins-claim4
+      - name: jenkins-claim5
+        persistentVolumeClaim:
+          claimName: jenkins-claim5
+status: {}

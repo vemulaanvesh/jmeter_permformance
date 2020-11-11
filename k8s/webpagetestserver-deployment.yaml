@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: ./kompose --file docker-compose-with-frontend.yml convert
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: webpagetestserver
+  name: webpagetestserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: webpagetestserver
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: ./kompose --file docker-compose-with-frontend.yml convert
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: webpagetestserver
+    spec:
+      containers:
+      - image: webpagetest/server
+        imagePullPolicy: ""
+        name: wptserver
+        ports:
+        - containerPort: 80
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/www/html/results/
+          name: webpagetest-results
+        - mountPath: /var/www/html/settings/
+          name: webpagetest-settings
+        - mountPath: /var/www/html/logs/
+          name: webpagetest-logs
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: webpagetest-results
+        persistentVolumeClaim:
+          claimName: webpagetest-results
+      - name: webpagetest-settings
+        persistentVolumeClaim:
+          claimName: webpagetest-settings
+      - name: webpagetest-logs
+        persistentVolumeClaim:
+          claimName: webpagetest-logs
+status: {}
