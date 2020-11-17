@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: grafana
+  name: grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: grafana
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: grafana
+    spec:
+      imagePullSecrets:
+      - name: dockersecret
+      containers:
+      - env:
+        - name: GF_AUTH_ANONYMOUS_ENABLED
+          value: "true"
+        - name: GF_INSTALL_PLUGINS
+          value: briangann-datatable-panel
+        - name: GF_SECURITY_ADMIN_PASSWORD
+          value: admin
+        - name: GF_SECURITY_ADMIN_USER
+          value: admin
+        - name: GF_USERS_ALLOW_ORG_CREATE
+          value: "false"
+        - name: GF_USERS_ALLOW_SIGN_UP
+          value: "false"
+        image: muralivishnun/grafana:latest
+        imagePullPolicy: ""
+        name: grafana
+        ports:
+        - containerPort: 3000
+        resources: {}
+        securityContext:
+          runAsUser: 104
+        volumeMounts:
+        - mountPath: /tmp/lib/grafana/
+          name: grafana-home-physical-volume
+        - mountPath: /tmp/grafana/
+          name: grafana-conf-physical-volume
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: grafana-home-physical-volume
+        persistentVolumeClaim:
+          claimName: grafana-home-pvc
+      - name: grafana-conf-physical-volume
+        persistentVolumeClaim:
+          claimName: grafana-conf-pvc
+status: {}

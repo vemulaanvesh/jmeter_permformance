@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: influxdb-timeshift-proxy
+  name: influxdb-timeshift-proxy
+spec:
+  ports:
+  - name: "8989"
+    port: 8989
+    targetPort: 8989
+  selector:
+    io.kompose.service: influxdb-timeshift-proxy
+status:
+  loadBalancer: {}

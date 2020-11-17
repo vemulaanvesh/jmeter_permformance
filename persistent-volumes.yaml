@@ -1,0 +1,152 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: grafana-home-physical-volume
+  labels:
+    type: local
+spec:
+  #storageClassName: manual
+  capacity:
+    storage: 128Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/tmp/grafana-home"
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: grafana-home-pvc
+spec:
+  #storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 128Mi
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: grafana-conf-physical-volume
+  labels:
+    type: local
+spec:
+  # storageClassName: manual
+  capacity:
+    storage: 128Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/tmp/grafana-conf"
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: grafana-conf-pvc
+spec:
+  # storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 128Mi
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: influxdb-physical-volume
+  labels:
+    type: local
+spec:
+  #storageClassName: manual
+  capacity:
+    storage: 128Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/tmp/influxdb"
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: influxdb-pvc
+spec:
+  #storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 128Mi
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: influxdb-timeshift-proxy-physical-volume
+  labels:
+    type: local
+spec:
+  #storageClassName: manual
+  capacity:
+    storage: 128Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/tmp/influxdb-timeshift-proxy"
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: influxdb-timeshift-proxy-pvc
+spec:
+  #storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 128Mi
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: jenkins-home-physical-volume
+  labels:
+    type: local
+spec:
+ # storageClassName: manual
+  capacity:
+    storage: 128Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/tmp/jenkins-home"
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jenkins-home-pvc
+spec:
+  # storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 128Mi

@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: influxdb-timeshift-proxy
+  name: influxdb-timeshift-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: influxdb-timeshift-proxy
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: influxdb-timeshift-proxy
+    spec:
+      containers:
+      - name: influxdb-timeshift-proxy
+        image: juris/influxdb-timeshift-proxy
+        ports:
+        - containerPort: 8089
+        env:
+        - name: INFLUXDB
+          value: influxdb:8086

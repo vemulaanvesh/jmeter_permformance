@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: jenkins
+  name: jenkins
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: jenkins
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: jenkins
+    spec:
+      imagePullSecrets:
+      - name: dockersecret
+      containers:
+      - env:
+        - name: JENKINS_ADMIN_LOGIN
+          value: admin
+        - name: JENKINS_ADMIN_PASSWORD
+          value: admin
+        image: muralivishnun/jenkins:latest
+        imagePullPolicy: ""
+        name: jenkins
+        ports:
+        - containerPort: 8080
+        - containerPort: 50000
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/jenkins_home
+          name: jenkins-home-physical-volume
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: jenkins-home-physical-volume
+        persistentVolumeClaim:
+          claimName: jenkins-home-pvc
+status: {}
